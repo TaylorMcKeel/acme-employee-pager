@@ -2,7 +2,7 @@ let firstNamesList = document.querySelector('#firstName')
 let lastNamesList = document.querySelector('#lastName')
 let emailList = document.querySelector('#email')
 let titleList = document.querySelector('#title')
-let linkBar = document.querySelector('#links')
+let linkBar = document.querySelector('.links')
 
 
 const renderUsers = (results)=>{
@@ -48,11 +48,13 @@ const renderTitle = (results)=>{
 const renderLinks = (results)=>{
     let links = []
     for(let i=0;i< Math.ceil((results.count)/50);i++){
-        links.push('<a href=''> ${i+1} </a>') 
+        links.push(`<a href="https://acme-users-api-rev.herokuapp.com/api/users/${i}"> ${i+1} </a>`)
     }
-    linkBar.innerHTML = html
+    linkBar.innerHTML = links.join('')
 
 }
+
+// need to change the link in the middle of the link tag so that is it rendered data not the original data
 
 
 
