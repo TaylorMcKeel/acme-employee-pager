@@ -1,9 +1,54 @@
-.main{
-    display: flex;
-    flex-direction: row;
+* {
+    box-sizing: border-box;
 }
 
-.itemBox{
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
     display: flex;
     flex-direction: column;
+}
+
+h1 {
+    margin: 1rem;
+}
+
+div#pages {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding: 0rem 1rem;
+    /* width: 100%; */
+}
+
+div#pages > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 2.5rem;
+    height: 3rem;
+}
+
+.selected {
+    border: 1px black solid;
+}
+
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 1rem;
+}
+
+table, th, tr, td {
+    border-bottom: 1px solid black;
+    padding: 1rem;
+    text-align: left;
+}
+
+th {
+    background-color: dodgerblue;
+    color: white;
+}
+
+td {
+    width: 25%;
 }

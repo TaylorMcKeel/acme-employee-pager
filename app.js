@@ -1,82 +1,54 @@
-let firstNamesList = document.querySelector('#firstName')
-let lastNamesList = document.querySelector('#lastName')
-let emailList = document.querySelector('#email')
-let titleList = document.querySelector('#title')
-let linkBar = document.querySelector('.links')
+const usersList = document.querySelector('#usersList')
+const pageList = document.querySelector('#pages')
+const pages = document.querySelector('#pages')
+let idx = window.location.hash.slice(1)
 
+window.addEventListener('hashchange', () => {
+  idx = window.location.hash.slice(1)
+  goFetch(idx)
+})
 
-const renderUsers = (results)=>{
-    const html = results.users.map(result => {
-        return (
-            `<li>
-                ${result.firstName}
-            </li>`)
-    }).join('')
-    firstNamesList.innerHTML = html
+if (idx) {
+  goFetch(idx)
+} else {
+  goFetch(0)
 }
 
-const renderLastNames = (results)=>{
-    const html = results.users.map(result => {
-        return (
-            `<li>
-                ${result.lastName}
-            </li>`)
-    }).join('')
-    lastNamesList.innerHTML = html
+function renderUsers(users){
+  const html = users.map(user => {
+    return `<tr>
+      <td>${user.firstName}</td>
+      <td>${user.lastName}</td>
+      <td>${user.email}</td>
+      <td>${user.title}</td>
+      </tr>`   
+  })
+  html.unshift('<tr><th>First Name</th><th>Last Name</th><th>Email</th><th>Title</th></tr>')
+  usersList.innerHTML = html.join('')
 }
 
-const renderEmails = (results)=>{
-    const html = results.users.map(result => {
-        return (
-            `<li>
-                ${result.email}
-            </li>`)
-    }).join('')
-    emailList.innerHTML = html
-}
-
-const renderTitle = (results)=>{
-    const html = results.users.map(result => {
-        return (
-            `<li>
-                ${result.title}
-            </li>`)
-    }).join('')
-    titleList.innerHTML = html
-}
-
-const renderLinks = (results)=>{
-    let links = []
-    for(let i=0;i< Math.ceil((results.count)/50);i++){
-        links.push(`<a href="https://acme-users-api-rev.herokuapp.com/api/users/${i}"> ${i+1} </a>`)
+function renderPages(count, id){
+  let pageTotal = Math.ceil(count / 50, 0)
+  let html = []
+  for (let i = 1; i <= pageTotal; i++) {
+    if ((i - 1) === Number(id)) {
+      html.push(
+        `<div class='selected' data-id=${i - 1}><a href='#${i - 1}'>${i}</a></div>`
+      )
+    } else {
+      html.push(
+      `<div data-id=${i}><a href='#${i - 1}'>${i}</a></div>`
+      )
     }
-    linkBar.innerHTML = links.join('')
-
+  }
+  pageList.innerHTML = html.join('')
 }
 
-// need to change the link in the middle of the link tag so that is it rendered data not the original data
-
-
-
-
-
-
-fetch('https://acme-users-api-rev.herokuapp.com/api/users/')
-    .then(response=> response.json())
-    .then(results => {renderUsers(results)})
-
-fetch('https://acme-users-api-rev.herokuapp.com/api/users/')
-    .then(response=> response.json())
-    .then(results => {renderLastNames(results)})
-
-fetch('https://acme-users-api-rev.herokuapp.com/api/users/')
-    .then(response=> response.json())
-    .then(results => {renderEmails(results)})
-
-fetch('https://acme-users-api-rev.herokuapp.com/api/users/')
-    .then(response=> response.json())
-    .then(results => {renderTitle(results)})
-
-fetch('https://acme-users-api-rev.herokuapp.com/api/users/')
-    .then(response=> response.json())
-    .then(results => {renderLinks(results)})
+function goFetch (id) {
+  fetch(`https://acme-users-api-rev.herokuapp.com/api/users/${id}`)
+    .then(response => response.json())
+    .then(response => {
+      renderUsers(response.users)
+      renderPages(response.count, id)
+    })
+}
