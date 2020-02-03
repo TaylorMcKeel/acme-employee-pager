@@ -52,3 +52,5 @@ function goFetch (id) {
       renderPages(response.count, id)
     })
 }
+
+
